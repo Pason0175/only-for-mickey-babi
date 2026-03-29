@@ -4,7 +4,7 @@ const grass = document.getElementById('grass');
 const butterfly = document.getElementById('butterfly');
 const loveCopy = document.getElementById('loveCopy');
 const musicBtn = document.getElementById('musicBtn');
-let player;
+const bgMusic = document.getElementById('bgMusic');
 let playing = false;
 
 function buildGrass() {
@@ -150,31 +150,18 @@ if (window.gsap) {
   });
 }
 
-window.onYouTubeIframeAPIReady = function () {
-  player = new YT.Player('yt-player', {
-    height: '0',
-    width: '0',
-    videoId: 'tyKu0uZS86Q',
-    playerVars: {
-      autoplay: 0,
-      controls: 0,
-      disablekb: 1,
-      modestbranding: 1,
-      rel: 0,
-      loop: 1,
-      playlist: 'tyKu0uZS86Q',
-    },
-  });
-};
-
-musicBtn?.addEventListener('click', () => {
-  if (!player) return;
+musicBtn?.addEventListener('click', async () => {
+  if (!bgMusic) return;
   if (!playing) {
-    player.playVideo();
-    musicBtn.textContent = '⏸ Pause music';
-    playing = true;
+    try {
+      await bgMusic.play();
+      musicBtn.textContent = '⏸ Pause music';
+      playing = true;
+    } catch {
+      musicBtn.textContent = '⚠️ Tap again to play';
+    }
   } else {
-    player.pauseVideo();
+    bgMusic.pause();
     musicBtn.textContent = '🎵 Tap to play music';
     playing = false;
   }

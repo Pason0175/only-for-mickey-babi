@@ -33,7 +33,7 @@
             </radialGradient>
           </defs>
           <rect x="143" y="180" width="14" height="320" rx="7" fill="#16a34a" />
-          <g id="petals" transform="translate(150 155)">
+          <g id="petals" transform="translate(150 178)">
             <ellipse cx="0" cy="-78" rx="28" ry="72" fill="url(#petalGrad)" />
             <ellipse cx="0" cy="-78" rx="28" ry="72" fill="url(#petalGrad)" transform="rotate(45)" />
             <ellipse cx="0" cy="-78" rx="28" ry="72" fill="url(#petalGrad)" transform="rotate(90)" />
@@ -44,8 +44,8 @@
             <ellipse cx="0" cy="-78" rx="28" ry="72" fill="url(#petalGrad)" transform="rotate(315)" />
             <circle cx="0" cy="0" r="32" fill="#facc15" stroke="#eab308" stroke-width="5" />
           </g>
-          <ellipse cx="122" cy="308" rx="24" ry="12" fill="#22c55e" transform="rotate(-33 122 308)" />
-          <ellipse cx="178" cy="376" rx="24" ry="12" fill="#22c55e" transform="rotate(33 178 376)" />
+          <ellipse cx="122" cy="334" rx="24" ry="12" fill="#22c55e" transform="rotate(-33 122 334)" />
+          <ellipse cx="178" cy="388" rx="24" ry="12" fill="#22c55e" transform="rotate(33 178 388)" />
         </svg>
       </div>
 
@@ -60,10 +60,11 @@
   </main>
 
   <button class="music-btn" id="musicBtn">🎵 Tap to play music</button>
-  <div id="yt-player"></div>
+  <audio id="bgMusic" preload="auto" loop>
+    <source src="/assets/love-song.mp3" type="audio/mpeg" />
+  </audio>
 
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-  <script src="https://www.youtube.com/iframe_api"></script>
   <script src="/js/love.js"></script>
 </body>
 </html>
