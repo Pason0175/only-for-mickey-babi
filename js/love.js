@@ -87,23 +87,22 @@ if (window.gsap) {
     ease: 'sine.inOut',
   });
 
-  // smoother butterfly path
-  gsap.set(butterfly, { x: -260, y: 0 });
-  gsap.to(butterfly.querySelector('.left'), { rotateY: 36, yoyo: true, repeat: -1, duration: 0.18, ease: 'sine.inOut' });
-  gsap.to(butterfly.querySelector('.right'), { rotateY: -36, yoyo: true, repeat: -1, duration: 0.18, ease: 'sine.inOut' });
+  // smoother butterfly: continuous periodic motion (loop start=end seamlessly)
+  gsap.to(butterfly.querySelector('.left'), { rotateY: 38, yoyo: true, repeat: -1, duration: 0.16, ease: 'sine.inOut' });
+  gsap.to(butterfly.querySelector('.right'), { rotateY: -38, yoyo: true, repeat: -1, duration: 0.16, ease: 'sine.inOut' });
 
-  const path = [
-    { x: -240, y: 0 },
-    { x: -120, y: -55 },
-    { x: 10, y: -20 },
-    { x: 140, y: -78 },
-    { x: 260, y: -36 },
-    { x: 80, y: 30 },
-    { x: -90, y: -5 },
-    { x: -240, y: 0 },
-  ];
-  const fly = gsap.timeline({ repeat: -1, defaults: { duration: 1.45, ease: 'sine.inOut' } });
-  path.forEach((p) => fly.to(butterfly, { x: p.x, y: p.y }, '+=0.01'));
+  const orbit = { t: 0 };
+  gsap.to(orbit, {
+    t: Math.PI * 2,
+    duration: 9,
+    repeat: -1,
+    ease: 'none',
+    onUpdate: () => {
+      const x = Math.cos(orbit.t) * 210 + Math.cos(orbit.t * 2.2) * 35;
+      const y = Math.sin(orbit.t) * 55 - 18 + Math.sin(orbit.t * 1.6) * 12;
+      gsap.set(butterfly, { x, y, rotation: Math.sin(orbit.t) * 10 });
+    },
+  });
 }
 
 window.onYouTubeIframeAPIReady = function () {
