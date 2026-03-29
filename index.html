@@ -3,89 +3,29 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>To my babi</title>
-  <style>
-    :root {
-      --glass: rgba(255,255,255,0.78);
-      --text: #1f2937;
-      --accent: #ef476f;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: "Georgia", "Times New Roman", serif;
-      color: var(--text);
-      display: grid;
-      place-items: center;
-      background:
-        radial-gradient(circle at 20% 20%, rgba(255,255,255,.35), transparent 35%),
-        radial-gradient(circle at 80% 15%, rgba(255,255,255,.28), transparent 30%),
-        linear-gradient(rgba(20, 35, 20, .35), rgba(10, 15, 10, .45)),
-        url('./assets/daisy.png') center/cover no-repeat fixed;
-      padding: 24px;
-    }
-    .card {
-      max-width: 980px;
-      width: min(96vw, 980px);
-      background: var(--glass);
-      backdrop-filter: blur(6px);
-      border: 1px solid rgba(255,255,255,.55);
-      border-radius: 24px;
-      box-shadow: 0 20px 60px rgba(0,0,0,.25);
-      overflow: hidden;
-    }
-    .header {
-      padding: 28px 28px 8px;
-      text-align: center;
-      font-size: clamp(2rem, 5vw, 3.2rem);
-      font-weight: 700;
-      color: #b4235f;
-      letter-spacing: .5px;
-    }
-    .sub {
-      text-align: center;
-      font-size: clamp(1.2rem, 3vw, 1.8rem);
-      color: #374151;
-      margin: 0 24px 6px;
-      font-style: italic;
-    }
-    .content {
-      padding: 14px 32px 34px;
-      line-height: 1.85;
-      font-size: clamp(1rem, 2.1vw, 1.28rem);
-      text-align: center;
-    }
-    .signature {
-      margin-top: 14px;
-      font-weight: 700;
-      color: #991b1b;
-    }
-    .flower-divider {
-      width: 100%;
-      height: 90px;
-      background: linear-gradient(180deg, rgba(255,255,255,.0), rgba(255,255,255,.6));
-      border-top: 1px solid rgba(255,255,255,.6);
-      border-bottom: 1px solid rgba(255,255,255,.6);
-      display: grid;
-      place-items: center;
-      font-size: 32px;
-      color: #ca8a04;
-      letter-spacing: 8px;
-    }
-  </style>
+  <title>Only for you</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/styles.css" />
 </head>
 <body>
-  <main class="card">
-    <h1 class="header">To my babi</h1>
-    <p class="sub">To my world, Kinh Đô</p>
-    <div class="flower-divider">✿ ✿ ✿</div>
-    <section class="content">
-      How could my world possibly remain in orbit, when you are the only sun that gives it light and life?
-      Without your warmth, there is only the cold, silent dark.
-      I love you.
-      <p class="signature">Nguyễn Đình Vĩnh Hưng will always love Đỗ Viết Kiên.</p>
-    </section>
+  <main class="stage">
+    <div class="envelope-wrap" id="envelopeWrap">
+      <div class="glow"></div>
+      <div class="envelope"></div>
+      <div class="flap" id="flap"></div>
+      <div class="seal">💌</div>
+      <div class="letter" id="letter">
+        <div>
+          <h2 style="margin:0;font-family:'Playfair Display',serif;color:#be185d;">A special surprise</h2>
+          <p style="margin:.5rem 0 0;color:#6b7280">Open me and go to the love page ✨</p>
+        </div>
+      </div>
+    </div>
+    <button class="cta" id="openBtn">Open letter</button>
   </main>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="/js/landing.js"></script>
 </body>
 </html>
