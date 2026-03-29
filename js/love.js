@@ -7,6 +7,17 @@ const musicBtn = document.getElementById('musicBtn');
 const bgMusic = document.getElementById('bgMusic');
 let playing = false;
 
+async function startMusic() {
+  if (!bgMusic || playing) return;
+  try {
+    await bgMusic.play();
+    playing = true;
+    if (musicBtn) musicBtn.textContent = '⏸ Pause music';
+  } catch {
+    if (musicBtn) musicBtn.textContent = '🎵 Tap to play music';
+  }
+}
+
 function buildGrass() {
   if (!grass) return;
   grass.innerHTML = '';
@@ -69,37 +80,154 @@ function drawGalaxy() {
   ctx.scale(dpr, dpr);
 
   const stars = [];
-  const count = Math.min(900, Math.floor((w * h) / 2600));
+  const cx = w * 0.5;
+  const cy = h * 0.48;
+  const maxOrbit = Math.hypot(w, h) * 0.65;
+  const tones = ['#ffffff', '#ffe4ef', '#ffd7e8', '#ffeef8', '#ffd1dc'];
+  const count = Math.min(1400, Math.floor((w * h) / 1700));
+  const moon = {
+    x: w * 0.87,
+    y: h * 0.08,
+    r: Math.min(w, h) * 0.07,
+  };
+  const shootingStars = [];
+  let nextShotAt = 0;
+
+  function spawnShootingStar(now) {
+    const fromLeft = Math.random() > 0.5;
+    const startX = fromLeft ? -120 : w + 120;
+    const startY = h * (0.05 + Math.random() * 0.25);
+    const vx = fromLeft ? 14 + Math.random() * 8 : -(14 + Math.random() * 8);
+    const vy = 5 + Math.random() * 3;
+    shootingStars.push({
+      x: startX,
+      y: startY,
+      vx,
+      vy,
+      len: 85 + Math.random() * 85,
+      life: 0,
+      maxLife: 28 + Math.random() * 18,
+      a: 0.75 + Math.random() * 0.2,
+    });
+    nextShotAt = now + 1400 + Math.random() * 2600;
+  }
   for (let i = 0; i < count; i++) {
     stars.push({
-      x: Math.random() * w,
-      y: Math.random() * h,
-      r: Math.random() * 1.4 + 0.2,
-      a: Math.random() * 0.8 + 0.15,
+      orbit: Math.random() * maxOrbit,
+      theta: Math.random() * Math.PI * 2,
+      speed: 0.38 + Math.random() * 1.35,
+      r: Math.random() * 1.9 + 0.25,
+      a: Math.random() * 0.9 + 0.2,
+      drift: Math.random() * 2.2 + 0.3,
       p: Math.random() * Math.PI * 2,
+      c: tones[(Math.random() * tones.length) | 0],
     });
   }
 
   let t = 0;
+  nextShotAt = 1000 + Math.random() * 1800;
   function frame() {
-    t += 0.0011;
+    t += 0.00108;
     ctx.clearRect(0, 0, w, h);
 
-    const g = ctx.createRadialGradient(w * 0.72, h * 0.12, 12, w * 0.72, h * 0.12, Math.max(w, h) * 0.9);
-    g.addColorStop(0, 'rgba(168,85,247,0.13)');
-    g.addColorStop(0.45, 'rgba(59,130,246,0.06)');
+    const g = ctx.createRadialGradient(cx, cy - h * 0.18, 14, cx, cy, Math.max(w, h) * 0.88);
+    g.addColorStop(0, 'rgba(255,182,212,0.24)');
+    g.addColorStop(0.35, 'rgba(244,114,182,0.12)');
+    g.addColorStop(0.7, 'rgba(56,189,248,0.07)');
     g.addColorStop(1, 'rgba(0,0,0,0)');
     ctx.fillStyle = g;
     ctx.fillRect(0, 0, w, h);
 
+    // Romantic moon with soft halo and slight pulse.
+    const moonPulse = 0.92 + Math.sin(t * 8) * 0.08;
+    const moonGlow = ctx.createRadialGradient(moon.x, moon.y, moon.r * 0.2, moon.x, moon.y, moon.r * 2.8);
+    moonGlow.addColorStop(0, `rgba(255, 252, 240, ${0.3 * moonPulse})`);
+    moonGlow.addColorStop(0.5, 'rgba(255, 233, 204, 0.14)');
+    moonGlow.addColorStop(1, 'rgba(255, 233, 204, 0)');
+    ctx.fillStyle = moonGlow;
+    ctx.beginPath();
+    ctx.arc(moon.x, moon.y, moon.r * 2.8, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = '#fff6dd';
+    ctx.shadowColor = '#fff1cc';
+    ctx.shadowBlur = moon.r * 0.7;
+    ctx.beginPath();
+    ctx.arc(moon.x, moon.y, moon.r, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Small crater shading for depth.
+    ctx.shadowBlur = 0;
+    ctx.globalAlpha = 0.18;
+    ctx.fillStyle = '#d6cbb1';
+    ctx.beginPath();
+    ctx.arc(moon.x - moon.r * 0.24, moon.y - moon.r * 0.05, moon.r * 0.18, 0, Math.PI * 2);
+    ctx.arc(moon.x + moon.r * 0.15, moon.y + moon.r * 0.18, moon.r * 0.12, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.globalAlpha = 1;
+
     for (const s of stars) {
-      const tw = 0.65 + Math.sin(t * 28 + s.p) * 0.35;
-      ctx.globalAlpha = s.a * tw;
-      ctx.fillStyle = '#fff';
-      const dx = Math.cos(t * 2 + s.p) * 0.35;
-      const dy = Math.sin(t * 2 + s.p) * 0.35;
-      ctx.fillRect(s.x + dx, s.y + dy, s.r, s.r);
+      const theta = s.theta + t * s.speed;
+      const orbitX = Math.cos(theta) * s.orbit;
+      const orbitY = Math.sin(theta) * s.orbit * 0.58;
+      const driftX = Math.cos(t * 1.6 + s.p) * s.drift;
+      const driftY = Math.sin(t * 2.2 + s.p) * s.drift;
+      const x = cx + orbitX + driftX;
+      const y = cy + orbitY + driftY;
+
+      const tw = 0.72 + Math.sin(t * 52 + s.p) * 0.28;
+      const alpha = Math.min(1, s.a * tw);
+
+      ctx.globalAlpha = alpha;
+      ctx.fillStyle = s.c;
+      ctx.shadowColor = s.c;
+      ctx.shadowBlur = s.r * 6.5;
+      ctx.beginPath();
+      ctx.arc(x, y, s.r, 0, Math.PI * 2);
+      ctx.fill();
     }
+
+    // Shooting stars
+    if (t * 1000 >= nextShotAt && shootingStars.length < 3) {
+      spawnShootingStar(t * 1000);
+    }
+    for (let i = shootingStars.length - 1; i >= 0; i--) {
+      const s = shootingStars[i];
+      s.x += s.vx;
+      s.y += s.vy;
+      s.life += 1;
+      const lifeRatio = 1 - s.life / s.maxLife;
+      if (lifeRatio <= 0) {
+        shootingStars.splice(i, 1);
+        continue;
+      }
+
+      const tailX = s.x - (s.vx > 0 ? 1 : -1) * s.len;
+      const tailY = s.y - s.vy * 1.6;
+      const trail = ctx.createLinearGradient(s.x, s.y, tailX, tailY);
+      trail.addColorStop(0, `rgba(255,255,255,${0.95 * lifeRatio})`);
+      trail.addColorStop(0.35, `rgba(255,221,238,${0.55 * lifeRatio})`);
+      trail.addColorStop(1, 'rgba(255,221,238,0)');
+
+      ctx.strokeStyle = trail;
+      ctx.lineWidth = 2.1;
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.moveTo(s.x, s.y);
+      ctx.lineTo(tailX, tailY);
+      ctx.stroke();
+
+      ctx.fillStyle = '#ffffff';
+      ctx.shadowColor = '#ffe4ef';
+      ctx.shadowBlur = 8;
+      ctx.globalAlpha = s.a * lifeRatio;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, 1.9, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+    ctx.shadowBlur = 0;
+    ctx.globalAlpha = 1;
     requestAnimationFrame(frame);
   }
   frame();
@@ -112,14 +240,22 @@ window.addEventListener('resize', () => {
   buildGrass();
 });
 
+// Try autoplay as soon as /love opens.
+startMusic();
+
+// If autoplay is blocked, retry on first user interaction anywhere.
+['pointerdown', 'touchstart', 'keydown'].forEach((eventName) => {
+  window.addEventListener(eventName, startMusic, { once: true });
+});
+
 if (window.gsap) {
   gsap.set(loveCopy, { y: -26, opacity: 0 });
-  gsap.set(flower, { y: 170, opacity: 0.2, scale: 0.78 });
+  gsap.set(flower, { y: 0, opacity: 0.2, scale: 0.78 });
   gsap.set(grass, { y: 120, opacity: 0 });
 
   gsap.timeline()
     .to(loveCopy, { y: 0, opacity: 1, duration: 1.05, ease: 'power3.out' }, 0)
-    .to(flower, { y: 0, opacity: 1, scale: 1.0, duration: 1.7, ease: 'back.out(1.1)' }, 0.12)
+    .to(flower, { opacity: 1, scale: 1.0, duration: 1.7, ease: 'back.out(1.1)' }, 0.12)
     .to(grass, { y: 0, opacity: 1, duration: 1.25, ease: 'power2.out' }, 0.22);
 
   // flower & grass wind sway
@@ -153,16 +289,10 @@ if (window.gsap) {
 musicBtn?.addEventListener('click', async () => {
   if (!bgMusic) return;
   if (!playing) {
-    try {
-      await bgMusic.play();
-      musicBtn.textContent = '⏸ Pause music';
-      playing = true;
-    } catch {
-      musicBtn.textContent = '⚠️ Tap again to play';
-    }
+    await startMusic();
   } else {
     bgMusic.pause();
-    musicBtn.textContent = '🎵 Tap to play music';
+    if (musicBtn) musicBtn.textContent = '🎵 Tap to play music';
     playing = false;
   }
 });

@@ -187,7 +187,7 @@ body {
 .flower-root {
   position: absolute;
   left: 50%;
-  bottom: 5.5vh;
+  bottom: 0;
   width: min(430px, 40vw);
   height: min(620px, 62vh);
   transform: translateX(-50%);

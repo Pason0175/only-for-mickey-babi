@@ -10,28 +10,46 @@
   <link rel="stylesheet" href="/css/styles.css" />
 </head>
 <body>
+  <!-- Animated galaxy/star background canvas -->
   <canvas id="galaxy"></canvas>
+
+  <!-- Landing stage container -->
   <main class="stage">
+    <!-- Clickable envelope component wrapper -->
     <div class="envelope-wrap" id="envelopeWrap" role="button" tabindex="0" aria-label="Open love letter">
+      <!-- Envelope body (4 triangle pieces) -->
       <div class="envelope">
+        <!-- Envelope triangle: top/left panel -->
         <div class="tri-a"></div>
+        <!-- Envelope triangle: top/right panel -->
         <div class="tri-b"></div>
+        <!-- Envelope triangle: bottom/left panel -->
         <div class="tri-c"></div>
+        <!-- Envelope triangle: bottom/right panel -->
         <div class="tri-d"></div>
       </div>
+
+      <!-- Letter content card -->
       <div class="letter" id="letter">
         <div>
+          <!-- Letter heading -->
           <h2>To My Babi</h2>
+          <!-- Letter subtitle -->
           <p>A surprise for Kinh Đô ✨</p>
         </div>
       </div>
+
+      <!-- Envelope opening flap -->
       <div class="flap" id="flap"></div>
 
+      <!-- User interaction hint -->
       <div class="tap-hint" id="tapHint">Tap the letter</div>
     </div>
   </main>
 
+  <!-- GSAP animation library -->
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <!-- Landing page behavior -->
   <script src="/js/landing.js"></script>
 </body>
 </html>
