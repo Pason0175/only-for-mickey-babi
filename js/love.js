@@ -7,6 +7,24 @@ const musicBtn = document.getElementById('musicBtn');
 let player;
 let playing = false;
 
+function buildGrass() {
+  if (!grass) return;
+  grass.innerHTML = '';
+  const count = Math.max(36, Math.floor(window.innerWidth / 16));
+  for (let i = 0; i < count; i++) {
+    const blade = document.createElement('div');
+    blade.className = 'blade';
+    const h = 22 + Math.random() * 40;
+    const rot = -5 + Math.random() * 10;
+    const dur = 2 + Math.random() * 2.2;
+    const delay = Math.random() * 1.9;
+    blade.style.height = `${h}px`;
+    blade.style.transform = `rotate(${rot}deg)`;
+    blade.style.animation = `sway ${dur}s ease-in-out ${delay}s infinite alternate`;
+    grass.appendChild(blade);
+  }
+}
+
 function drawGalaxy() {
   if (!galaxy) return;
   const ctx = galaxy.getContext('2d');
@@ -58,7 +76,11 @@ function drawGalaxy() {
 }
 
 drawGalaxy();
-window.addEventListener('resize', drawGalaxy);
+buildGrass();
+window.addEventListener('resize', () => {
+  drawGalaxy();
+  buildGrass();
+});
 
 if (window.gsap) {
   gsap.set(loveCopy, { y: -26, opacity: 0 });
@@ -77,13 +99,6 @@ if (window.gsap) {
     yoyo: true,
     repeat: -1,
     duration: 2.8,
-    ease: 'sine.inOut',
-  });
-  gsap.to(grass, {
-    x: 10,
-    yoyo: true,
-    repeat: -1,
-    duration: 3.2,
     ease: 'sine.inOut',
   });
 
