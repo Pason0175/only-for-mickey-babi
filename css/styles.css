@@ -214,6 +214,33 @@ body {
   transform-origin: bottom center;
   background: linear-gradient(to top, #14532d, #16a34a);
   opacity: .82;
+  --rot: 0deg;
+  transform: rotate(var(--rot));
+}
+.tiny-flower {
+  position: absolute;
+  bottom: 1.8rem;
+  width: 16px;
+  height: 16px;
+  z-index: 1;
+}
+.tiny-petal {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  opacity: .92;
+  box-shadow: 0 0 2px rgba(255,255,255,.3);
+}
+.tiny-center {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: #fde68a;
+  box-shadow: 0 0 4px rgba(253,230,138,.4);
 }
 
 .butterfly {
@@ -261,8 +288,12 @@ body {
 }
 
 @keyframes sway {
-  from { transform: rotate(-3deg); }
-  to { transform: rotate(3deg); }
+  from { transform: rotate(calc(var(--rot) - 5deg)); }
+  to { transform: rotate(calc(var(--rot) + 5deg)); }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0) scale(var(--scale, 1)); }
+  50% { transform: translateY(-3px) scale(var(--scale, 1)); }
 }
 
 @media (max-width: 780px) {

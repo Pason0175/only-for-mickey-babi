@@ -10,18 +10,48 @@ let playing = false;
 function buildGrass() {
   if (!grass) return;
   grass.innerHTML = '';
-  const count = Math.max(36, Math.floor(window.innerWidth / 16));
+
+  // Grass blades (inspired by provided component)
+  const count = 150;
   for (let i = 0; i < count; i++) {
     const blade = document.createElement('div');
     blade.className = 'blade';
-    const h = 22 + Math.random() * 40;
+    const h = 20 + Math.random() * 40;
     const rot = -5 + Math.random() * 10;
-    const dur = 2 + Math.random() * 2.2;
-    const delay = Math.random() * 1.9;
+    const dur = 2 + Math.random() * 2;
+    const delay = Math.random() * 2;
     blade.style.height = `${h}px`;
-    blade.style.transform = `rotate(${rot}deg)`;
+    blade.style.setProperty('--rot', `${rot}deg`);
     blade.style.animation = `sway ${dur}s ease-in-out ${delay}s infinite alternate`;
     grass.appendChild(blade);
+  }
+
+  // Tiny flowers in grass
+  const flowerColors = ['#FFB7B2', '#FFDAC1', '#E2F0CB', '#B5EAD7', '#C7CEEA'];
+  const flowerCount = 15;
+  for (let i = 0; i < flowerCount; i++) {
+    const f = document.createElement('div');
+    f.className = 'tiny-flower';
+    const left = Math.random() * 100;
+    const scale = 0.5 + Math.random() * 0.5;
+    const delay = Math.random() * 3;
+    const dur = 3 + Math.random() * 2;
+    f.style.left = `${left}%`;
+    f.style.setProperty('--scale', String(scale));
+    f.style.animation = `float ${dur}s ease-in-out ${delay}s infinite`;
+
+    const color = flowerColors[Math.floor(Math.random() * flowerColors.length)];
+    [0, 60, 120, 180, 240, 300].forEach((deg) => {
+      const p = document.createElement('div');
+      p.className = 'tiny-petal';
+      p.style.backgroundColor = color;
+      p.style.transform = `rotate(${deg}deg) translateY(-2px)`;
+      f.appendChild(p);
+    });
+    const c = document.createElement('div');
+    c.className = 'tiny-center';
+    f.appendChild(c);
+    grass.appendChild(f);
   }
 }
 
