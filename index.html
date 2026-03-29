@@ -10,19 +10,24 @@
   <link rel="stylesheet" href="/css/styles.css" />
 </head>
 <body>
-  <div class="stars"></div>
+  <canvas id="galaxy"></canvas>
   <main class="stage">
-    <div class="envelope-wrap" id="envelopeWrap" aria-label="Open letter" role="button" tabindex="0">
-      <div class="envelope"></div>
-      <div class="center-fold"></div>
-      <div class="flap" id="flap"></div>
-      <div class="seal">❤️</div>
+    <div class="envelope-wrap" id="envelopeWrap" role="button" tabindex="0" aria-label="Open love letter">
+      <div class="envelope">
+        <div class="tri-a"></div>
+        <div class="tri-b"></div>
+        <div class="tri-c"></div>
+        <div class="tri-d"></div>
+      </div>
       <div class="letter" id="letter">
         <div>
+          <div style="font-size:30px;line-height:1">❤️</div>
           <h2>To My Babi</h2>
           <p>A surprise for Kinh Đô ✨</p>
         </div>
       </div>
+      <div class="flap" id="flap"></div>
+      <div class="seal">❤️</div>
       <div class="tap-hint" id="tapHint">Tap the letter</div>
     </div>
   </main>
